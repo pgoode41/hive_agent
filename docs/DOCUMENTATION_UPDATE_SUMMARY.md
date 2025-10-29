@@ -255,6 +255,72 @@ generated_image_captures/sessions/session_YYYYMMDD_HHMMSS/
 
 ---
 
-**Documentation Version**: 3.0
+## Director Refactoring - Flexible Triggers (v4.0)
+**Date**: October 29, 2025
+
+### Major Improvements:
+**Flexible Visual Trigger System** replacing single person detection with multi-trigger support
+
+#### Key Changes:
+1. **Configuration Restructuring**:
+   - Semantic naming with better organization
+   - `person_detection` → `visual_trigger_detection`
+   - Hierarchical config with `camera`, `scene_analysis`, and `response_generation` sections
+   - Cleaner separation of concerns
+
+2. **Multiple Trigger Types** (6 available):
+   - **Person Detection**: Human presence detection
+   - **Vehicle Detection**: Cars, trucks, motorcycles, bicycles
+   - **Animal Detection**: Pets and wildlife
+   - **Motion Detection**: Significant movement
+   - **Package Detection**: Deliveries and parcels
+   - **Anomaly Detection**: Unusual or concerning situations
+
+3. **Trigger Configuration**:
+   - Custom prompts for each trigger type
+   - Positive keyword matching for flexible detection
+   - Individual enable/disable for each trigger
+   - Active trigger selection system
+
+4. **HiveMind API Alignment**:
+   - Removed unsupported parameters (frequency_penalty, presence_penalty, etc.)
+   - Streamlined to use only documented HiveMind API features
+   - Cleaner request/response handling
+
+5. **Voice and Audio Features** (Config prepared):
+   - ASR configuration for speech recognition
+   - TTS configuration with 8 voice profiles
+   - Voice-specific settings (nibbles, default, billie, claptrap, cortana, gaige, moxxi, vega)
+
+6. **Session Enhancements**:
+   - Sessions now track trigger type
+   - Metadata includes which trigger activated
+   - Analysis and response generation per session
+
+#### Configuration Example:
+```json
+{
+  "visual_trigger_detection": {
+    "active_trigger": "person_detection",
+    "triggers": {
+      "person_detection": {
+        "enabled": true,
+        "prompt": "Is there a person?",
+        "positive_keywords": ["true", "yes", "person"]
+      }
+    }
+  }
+}
+```
+
+#### Documentation Updates:
+- **API.md**: Updated with flexible trigger system and new config structure
+- **README.md**: Revised director description with trigger types
+- **QUICKSTART.md**: New configuration examples with triggers
+- **DOCUMENTATION_UPDATE_SUMMARY.md**: Added v4.0 changelog
+
+---
+
+**Documentation Version**: 4.0
 **Last Updated**: October 29, 2025
-**Total Documentation**: ~2,200 lines across 5 files
+**Total Documentation**: ~2,500 lines across 8 files

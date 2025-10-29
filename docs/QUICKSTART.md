@@ -238,7 +238,7 @@ cargo clippy
 
 ## Test the Director Service
 
-The Director provides AI-powered monitoring with automatic person detection:
+The Director provides flexible AI-powered monitoring with multiple trigger types:
 
 ### Quick Test
 ```bash
@@ -249,34 +249,54 @@ curl http://localhost:6084/api/v1/hive_agent-director/status
 {
   "service": "hive_agent-director",
   "status": "operational",
-  "session_active": false,  # or true if person detected
+  "session_active": false,  # or true if trigger detected
   "session_directory": null  # or path to session folder
 }
 ```
 
 ### How It Works
 1. **Monitoring Mode** (default):
-   - Captures images every 5 seconds
-   - Sends to Vision LLM for person detection
-   - Waits for triggers
+   - Captures images at configured interval
+   - Sends to Vision LLM for trigger detection
+   - Checks for active trigger type (person, vehicle, animal, etc.)
+   - Uses positive keywords to determine trigger activation
 
-2. **Session Mode** (when person detected):
+2. **Session Mode** (when trigger detected):
    - Creates timestamped folder: `sessions/session_YYYYMMDD_HHMMSS/`
-   - Saves trigger image
-   - Captures every 30 seconds
-   - Auto-ends after 60 minutes
+   - Saves trigger image and metadata with trigger type
+   - Performs scene analysis (if enabled)
+   - Generates response text (if enabled)
+   - Captures at session interval
+   - Auto-ends after timeout
 
 ### Configuration
-Edit `director_config.json`:
+Edit `director_config.json` for flexible triggers:
 ```json
 {
-  "camera_url": "http://localhost:6082",
-  "vision_llm_url": "http://192.168.0.46:5080/gim/llm_mid_visual/ask_question",
-  "vision_llm_enabled": true,  # Set to false to disable detection
-  "monitoring_interval": 5,
-  "session_interval": 30,
-  "session_timeout_minutes": 60
-}
+  "camera": {
+    "url": "http://localhost:6082",
+    "monitoring_interval_seconds": 5,
+    "session_interval_seconds": 30,
+    "session_timeout_minutes": 60
+  },
+  "visual_trigger_detection": {
+    "enabled": true,
+    "active_trigger": "person_detection",  # Choose active trigger
+    "triggers": {
+      "person_detection": {
+        "enabled": true,
+        "prompt": "Is there a person in this image?",
+        "positive_keywords": ["true", "yes", "person"]
+      },
+      "vehicle_detection": {
+        "enabled": false,  # Enable to also detect vehicles
+        "prompt": "Is there a vehicle in this image?",
+        "positive_keywords": ["true", "yes", "vehicle", "car"]
+      }
+      # Also available: animal_detection, motion_detection, 
+      # package_detection, anomaly_detection
+    }
+  }
 ```
 
 ### Manual Session Control

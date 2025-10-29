@@ -41,31 +41,49 @@ Complete documentation for the Hive Agent microservices ecosystem.
 
 ---
 
-### 🤖 Director Service - AI-Powered Monitoring Orchestrator (NEW!)
-**Intelligent trigger-based monitoring system** with Vision LLM integration:
-- **Dual-Mode Operation** - Monitoring mode (5s) and Active Session mode (30s)
-- **Vision LLM Integration** - Works with HiveMind or Ollama for person detection
-- **Session Management** - Automatic session creation with timestamped folders
-- **Configurable Triggers** - Define custom detection conditions
-- **Auto-Timeout** - Sessions automatically end after configured duration
+### 🤖 Director Service - Flexible AI-Powered Monitoring Orchestrator
+**Multi-trigger monitoring system** with advanced Vision and Text LLM integration:
+- **Flexible Trigger System** - 6 configurable trigger types (person, vehicle, animal, motion, package, anomaly)
+- **Dual-Mode Operation** - Monitoring mode and Active Session mode with different intervals
+- **Vision & Text LLM Integration** - Scene analysis and response generation via HiveMind
+- **Session Management** - Automatic session creation with comprehensive metadata
+- **Keyword-Based Detection** - Customizable positive keywords for each trigger type
 
 **Key Features:**
-- Monitors camera feed every 5 seconds
-- Uses Vision LLM to detect persons or other triggers
-- Creates timestamped session folders when triggered
-- Switches to 30-second capture interval during sessions
-- Saves trigger image and all session captures
-- Returns to monitoring after timeout or manual end
+- Monitors camera feed at configurable intervals
+- Supports multiple visual trigger types with custom prompts
+- Performs scene analysis when triggered
+- Generates contextual responses using Text LLM
+- Creates detailed session folders with analysis and metadata
+- Saves trigger image, analysis text, and generated responses
+- Auto-timeout with return to monitoring
 
-**Configuration** (`director_config.json`):
+**Trigger Types Available:**
+- **Person Detection** - Detect human presence
+- **Vehicle Detection** - Cars, trucks, motorcycles, bicycles
+- **Animal Detection** - Pets and wildlife
+- **Motion Detection** - Significant movement
+- **Package Detection** - Deliveries and parcels
+- **Anomaly Detection** - Unusual or concerning situations
+
+**Configuration Structure** (`director_config.json`):
 ```json
 {
-  "camera_url": "http://localhost:6082",
-  "vision_llm_url": "http://192.168.0.46:5080/gim/llm_mid_visual/ask_question",
-  "vision_llm_enabled": true,
-  "monitoring_interval": 5,
-  "session_interval": 30,
-  "session_timeout_minutes": 60
+  "camera": {
+    "url": "http://localhost:6082",
+    "monitoring_interval_seconds": 5,
+    "session_interval_seconds": 30
+  },
+  "visual_trigger_detection": {
+    "active_trigger": "person_detection",
+    "triggers": {
+      "person_detection": {
+        "enabled": true,
+        "prompt": "Is there a person?",
+        "positive_keywords": ["true", "yes", "person"]
+      }
+    }
+  }
 }
 ```
 
@@ -169,7 +187,7 @@ Quick reference for developers to get started:
 | **Text Player** | 6079 | Display text output |
 | **Camera Server** | 6082 | Cross-platform camera capture (Windows/macOS/Linux) |
 | **Tools** | 6083 | Utility tools and helpers |
-| **Director** | 6084 | AI monitoring with Vision LLM person detection |
+| **Director** | 6084 | Multi-trigger AI monitoring with Vision/Text LLM integration |
 
 **\* Actual ports are dynamically assigned based on availability**
 

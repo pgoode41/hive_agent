@@ -477,31 +477,75 @@ Manually ends the current session and returns to monitoring mode.
 
 ### Director Configuration
 
-The director uses a JSON configuration file (`director_config.json`) with the following structure:
+The director uses a JSON configuration file (`director_config.json`) with a flexible trigger system:
 
 ```json
 {
-  "camera_url": "http://localhost:6082",
-  "vision_llm_url": "http://192.168.0.46:5080/gim/llm_mid_visual/ask_question",
-  "vision_llm_enabled": true,
-  "monitoring_interval": 5,
-  "session_interval": 30,
-  "session_timeout_minutes": 60
+  "camera": {
+    "url": "http://localhost:6082",
+    "monitoring_interval_seconds": 5,
+    "session_interval_seconds": 30,
+    "session_timeout_minutes": 60
+  },
+  
+  "visual_trigger_detection": {
+    "endpoint": "http://192.168.0.46:5080/gim/llm_mid_visual/ask_question",
+    "enabled": true,
+    "timeout_ms": 30000,
+    "max_tokens": 50,
+    "active_trigger": "person_detection",
+    "triggers": {
+      "person_detection": {
+        "enabled": true,
+        "prompt": "Is there a person in this image? Answer only 'true' or 'false'.",
+        "positive_keywords": ["true", "yes", "person", "people", "human"]
+      },
+      "vehicle_detection": {
+        "enabled": false,
+        "prompt": "Is there a vehicle in this image?",
+        "positive_keywords": ["true", "yes", "vehicle", "car", "truck"]
+      },
+      "animal_detection": {
+        "enabled": false,
+        "prompt": "Is there an animal in this image?",
+        "positive_keywords": ["true", "yes", "animal", "dog", "cat", "pet"]
+      },
+      // Additional triggers: motion_detection, package_detection, anomaly_detection
+    }
+  },
+  
+  "scene_analysis": {
+    "enabled": true,
+    "prompt": "Describe what you see in detail...",
+    "timeout_ms": 30000,
+    "max_tokens": 500
+  },
+  
+  "response_generation": {
+    "endpoint": "http://192.168.0.46:5080/gim/llm_mid/ask_question",
+    "enabled": true,
+    "prompt": "Generate a friendly greeting...",
+    "timeout_ms": 30000,
+    "max_tokens": 200
+  }
 }
 ```
 
 ### Operating Modes
 
 1. **Monitoring Mode**:
-   - Captures images every 5 seconds (configurable)
+   - Captures images at configured interval (default: 5 seconds)
    - Sends images to Vision LLM for trigger detection
-   - Checks for person presence or other configured triggers
+   - Checks active trigger type (person, vehicle, animal, motion, package, or anomaly)
+   - Uses positive keywords to determine if trigger condition is met
 
 2. **Active Session Mode**:
-   - Triggered when Vision LLM detects a person
-   - Creates timestamped session folder
-   - Captures images every 30 seconds (configurable)
-   - Saves all captures to session folder
+   - Activated when the configured trigger is detected
+   - Creates timestamped session folder with trigger type recorded
+   - Captures images at session interval (default: 30 seconds)
+   - Performs scene analysis using Vision LLM (if enabled)
+   - Generates contextual response using Text LLM (if enabled)
+   - Saves trigger image, analysis, and generated response
    - Automatically ends after timeout or manual intervention
 
 ### Session Structure
@@ -509,10 +553,17 @@ The director uses a JSON configuration file (`director_config.json`) with the fo
 When triggered, the director creates:
 ```
 generated_image_captures/sessions/session_YYYYMMDD_HHMMSS/
-├── trigger.png          # The image that triggered the session
-├── capture_HHMMSS.png   # Same image, first in sequence
-├── capture_HHMMSS.png   # 30 seconds later
-└── ...                  # Additional captures every 30 seconds
+├── trigger.png              # The image that triggered the session
+├── capture_HHMMSS.png       # Same image, first in sequence
+├── capture_HHMMSS.png       # Subsequent captures at session interval
+├── analysis.txt             # Scene analysis from Vision LLM (if enabled)
+├── generated_speech.txt     # Response from Text LLM (if enabled)
+└── session_info.json        # Complete session metadata including:
+    ├── timestamp            # When session started
+    ├── trigger_type         # Which trigger activated (e.g., "person_detection")
+    ├── analysis             # Full scene analysis text
+    ├── generated_speech     # Generated response text
+    └── config               # Snapshot of analysis and generation configs
 ```
 
 ---
