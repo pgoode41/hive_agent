@@ -1,0 +1,17 @@
+[workspace]
+resolver = "2"
+members = [
+    "rag",
+    "hive_agent-image-to-text-generation-loop",
+    "hive_agent-speech-to-text-generation-loop",
+    "hive_agent-text-to-speech-generation-loop",
+    "hive_agent-text-generation-loop",
+    "hive_agent-image-to-text-player-loop",
+    "hive_agent-audio-player",
+    "hive_agent-text-to-speech-player-loop",
+    "hive_agent-text-player-loop",
+    "hive_agent-camera-server",
+    "hive_agent-tools",
+    "hive_agent-director",
+    "hive_agent-warden"
+]

@@ -1,0 +1,48 @@
+HIVE AGENT TEST REPORT
+======================
+Date: Tue 28 Oct 2025 07:27:54 PM CDT
+Pass Rate: 96%
+
+DETAILED RESULTS:
+-----------------
+- RAG Status Endpoint: PASSED
+- hive_agent-text-to-speech-player-loop health (port 6078): PASSED
+- Port 6082 is listening: PASSED
+- Disable RAG service: PASSED
+- hive_agent-audio-player health (port 6077): PASSED
+- Warden Health Check: PASSED
+- No services on 5000-6000 range: PASSED
+- Port 6077 is listening: PASSED
+- Enable RAG service: PASSED
+- hive_agent-text-generation-loop health (port 6075): PASSED
+- hive_agent-image-to-text-player-loop health (port 6076): PASSED
+- hive_agent-camera-server health (port 6082): PASSED
+- Services using 6000-7000 range: PASSED
+- Port 6071 is listening: PASSED
+- Port 6074 is listening: PASSED
+- Port 6076 is listening: PASSED
+- Port 6079 is listening: PASSED
+- hive_agent-director health (port 6084): PASSED
+- Port 6075 is listening: PASSED
+- hive_agent-text-player-loop health (port 6079): PASSED
+- hive_agent-text-to-speech-generation-loop health (port 6074): PASSED
+- Port 6083 is listening: PASSED
+- Port 6084 is listening: PASSED
+- At least 10 services running: PASSED
+- Config is valid JSON: PASSED
+- Config file exists: PASSED
+- hive_agent-speech-to-text-generation-loop health (port 6073): PASSED
+- Warden handled 10 rapid requests: PASSED
+- RAG is disabled: FAILED
+- rag health (port 6071): PASSED
+- Director Status: PASSED
+- Warden Status Endpoint: PASSED
+- Port 6078 is listening: PASSED
+- RAG is running again: PASSED
+- Text Generation Status: PASSED
+- Port 6073 is listening: PASSED
+- hive_agent-image-to-text-generation-loop health (port 6072): PASSED
+- Port 6072 is listening: PASSED
+- Warden Operational Status: FAILED
+- hive_agent-tools health (port 6083): PASSED
+- Warden Services List: PASSED

@@ -1,0 +1,8 @@
+{
+  "camera_url": "http://localhost:6082",
+  "vision_llm_url": "http://192.168.0.46:5080/gim/llm_mid_visual/ask_question",
+  "vision_llm_enabled": true,
+  "monitoring_interval": 5,
+  "session_interval": 30,
+  "session_timeout_minutes": 60
+}
