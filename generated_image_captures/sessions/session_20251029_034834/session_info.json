@@ -1,0 +1,20 @@
+{
+  "analysis": "The image shows a person standing in a doorway, facing away from the camera. They are wearing a black t-shirt with a graphic design, dark pants, and sneakers. The person appears to be holding a smartphone in their right hand. The environment suggests an indoor setting, possibly a home, with a white door frame and a glimpse of a window with blinds in the background. There is a small object on the floor to the right of the person, which could be a tool or a piece of equipment.",
+  "generated_speech": "Hello there! It looks like you’re ready to step out and take on the day! I love your graphic tee—it really adds a cool vibe to the scene. And it seems like you might be getting some important messages on that smartphone of yours. If you need any assistance or have questions about anything, I'm here to help!",
+  "response_generation_config": {
+    "enabled": true,
+    "endpoint": "http://192.168.0.46:5080/gim/llm_mid/ask_question",
+    "max_tokens": 200,
+    "prompt": "Based on this scene analysis, generate a friendly greeting or observation as if you were a helpful assistant acknowledging the person's presence.",
+    "timeout_ms": 30000
+  },
+  "scene_analysis_config": {
+    "enabled": true,
+    "max_tokens": 500,
+    "prompt": "Describe what you see in this image in detail. Focus on the main subject, their appearance, what they might be doing, and the environment.",
+    "timeout_ms": 30000
+  },
+  "timestamp": "2025-10-29 03:48:45",
+  "trigger_image": "trigger.png",
+  "trigger_type": "person_detection"
+}
